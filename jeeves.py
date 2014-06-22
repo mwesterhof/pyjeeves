@@ -21,21 +21,25 @@ class Database(object):
             print command
         self.cursor.execute(command)
         return self.cursor.fetchall()
-        
+
     def _create_table(self, name, **fields):
-        layout = '(' + ', '.join(
+        layout = '(' + \
+            ', '.join(
                 [' '.join([n, type_])
-                for n, type_ in fields.items()]
-                ) + ')'
+                    for n, type_ in fields.items()]
+            ) + ')'
 
         self.execute(
-                'create table if not exists {0} {1}'.format(name, layout),
+            'create table if not exists {0} {1}'.format(name, layout),
         )
         self.db.commit()
 
     def query(self, cls, lookup):
         name = cls.get_table_name()
-        lookup_parts = ['{0}={1}'.format(k, v) for k, v in lookup.items()]
+        lookup_parts = [
+            '{0}={1}'.format(k, repr(v))
+            for k, v in lookup.items()
+        ]
         lookup = ' and '.join(lookup_parts)
         if lookup:
             lookup = ' where ' + lookup
@@ -48,7 +52,12 @@ class Database(object):
         columns = '(' + ', '.join(data.keys()) + ')'
         values = '(' + ', '.join([repr(val) for val in data.values()]) + ')'
 
-        self.execute('insert into {0} {1} values {2}'.format(name, columns, values), logging=True)
+        self.execute('insert into {0} {1} values {2}'.format(
+            name,
+            columns,
+            values
+        ), logging=True)
+
         self.db.commit()
 
     def _listing(self, name, *fields):
@@ -58,12 +67,12 @@ class Database(object):
             fields = ', '.join(fields)
 
         return self.execute(
-                'select {0} from {1}'.format(fields, name)
+            'select {0} from {1}'.format(fields, name)
         )
 
     def register(self, name, fields):
         return self._create_table(
-                name.lower(), **fields
+            name.lower(), **fields
         )
 
     def save_objects(self, objects):
@@ -116,4 +125,3 @@ class DBModel(object):
 
     def save(self):
         return Database().save_objects([self])
-

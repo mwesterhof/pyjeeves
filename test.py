@@ -20,5 +20,4 @@ class Test(DBModel):
     baz = ''
 
     def __repr__(self):
-        return foo
-
+        return self.foo
