@@ -33,6 +33,17 @@ class Database(object):
         )
         self.db.commit()
 
+    def query(self, cls, lookup):
+        name = cls.get_table_name()
+        lookup_parts = ['{0}={1}'.format(k, v) for k, v in lookup.items()]
+        lookup = ' and '.join(lookup_parts)
+        if lookup:
+            lookup = ' where ' + lookup
+        results = self.execute('select * from {0}{1}'.format(name, lookup))
+        columns = [item[0] for item in self.cursor.description]
+        data = [dict(zip(columns, item)) for item in results]
+        return [cls(**item) for item in data]
+
     def _insert_into_table(self, name, **data):
         columns = '(' + ', '.join(data.keys()) + ')'
         values = '(' + ', '.join([repr(val) for val in data.values()]) + ')'
@@ -57,7 +68,6 @@ class Database(object):
 
     def save_objects(self, objects):
         for obj in objects:
-            print obj.__dict__
             name = obj.__class__.__name__.lower()
             data = obj.__dict__
             return self._insert_into_table(name, **data)
@@ -87,6 +97,22 @@ class DBModelMeta(type):
 
 class DBModel(object):
     __metaclass__ = DBModelMeta
+
+    def __init__(self, **kwargs):
+        super(DBModel, self).__init__()
+        for k, v in kwargs.items():
+            if not v:
+                kwargs.pop(k)
+        self.__dict__.update(kwargs)
+
+    @classmethod
+    def find(cls, **lookup):
+        results = Database().query(cls, lookup)
+        return results
+
+    @classmethod
+    def get_table_name(cls):
+        return cls.__name__.lower()
 
     def save(self):
         return Database().save_objects([self])

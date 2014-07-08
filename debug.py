@@ -11,5 +11,7 @@ while True:
         print cursor.fetchall()
     elif inp == 'commit':
         con.commit()
+    elif inp == 'desc':
+        print cursor.description
     else:
         cursor.execute(inp)

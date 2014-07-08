@@ -1,18 +1,24 @@
 from jeeves import DBModel
 
 
-class Foo(DBModel):
-    foo = 0
-    bar = 0
-    baz = 0
+class Person(DBModel):
+    first_name = ''
+    last_name = ''
+    age = 0
+
+    def __repr__(self):
+        return '{0} {1} age {2}'.format(
+            self.first_name,
+            self.last_name,
+            self.age
+        )
 
 
-class Bar(DBModel):
-    foo = ''
+class Test(DBModel):
+    foo = 1
+    bar = 2
+    baz = ''
 
+    def __repr__(self):
+        return foo
 
-bla = Foo()
-bla.foo = 1
-bla.bar = 2
-bla.baz = 3
-bla.save()
