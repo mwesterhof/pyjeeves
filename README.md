@@ -12,6 +12,7 @@ As it stands, it currently implements a high-level database wrapper, tailored to
 TODO
 ----
 
+* respect default values in db models
 * Support automatic primary keys
 * Support relations
 * Support other SQL backends
