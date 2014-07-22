@@ -19,6 +19,7 @@ class Database(object):
     def execute(self, command, logging=False):
         if self.logging or logging:
             print command
+        print command
         self.cursor.execute(command)
         return self.cursor.fetchall()
 
@@ -26,7 +27,8 @@ class Database(object):
         layout = '(' + \
             ', '.join(
                 [' '.join([n, type_])
-                    for n, type_ in fields.items()]
+                    for n, type_ in fields.items()] +
+                ['id int PRIMARY KEY']
             ) + ')'
 
         self.execute(
@@ -112,6 +114,7 @@ class DBModel(object):
         for k, v in kwargs.items():
             if not v:
                 kwargs.pop(k)
+        kwargs['id'] = 0
         self.__dict__.update(kwargs)
 
     @classmethod

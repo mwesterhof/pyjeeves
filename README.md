@@ -12,10 +12,11 @@ As it stands, it currently implements a high-level database wrapper, tailored to
 TODO
 ----
 
+* Support automatic primary keys (and update vs insert)
 * respect default values in db models
-* Support automatic primary keys
 * Support relations
 * Support other SQL backends
+* testsuite
 
 * Plugin system
 * Further tools
