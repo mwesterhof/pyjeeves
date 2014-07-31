@@ -19,7 +19,6 @@ class Database(object):
     def execute(self, command, logging=False):
         if self.logging or logging:
             print command
-        print command
         self.cursor.execute(command)
         return self.cursor.fetchall()
 
@@ -28,7 +27,7 @@ class Database(object):
             ', '.join(
                 [' '.join([n, type_])
                     for n, type_ in fields.items()] +
-                ['id int PRIMARY KEY']
+                ['pk INTEGER PRIMARY KEY']
             ) + ')'
 
         self.execute(
@@ -50,9 +49,16 @@ class Database(object):
         data = [dict(zip(columns, item)) for item in results]
         return [cls(**item) for item in data]
 
+    def _get_repr(self, value):
+        if value is None:
+            return 'NULL'
+        return repr(value)
+
     def _insert_into_table(self, name, **data):
         columns = '(' + ', '.join(data.keys()) + ')'
-        values = '(' + ', '.join([repr(val) for val in data.values()]) + ')'
+        values = '(' + ', '.join(
+            [self._get_repr(val) for val in data.values()]
+        ) + ')'
 
         self.execute('insert into {0} {1} values {2}'.format(
             name,
@@ -111,10 +117,10 @@ class DBModel(object):
 
     def __init__(self, **kwargs):
         super(DBModel, self).__init__()
-        for k, v in kwargs.items():
-            if not v:
-                kwargs.pop(k)
-        kwargs['id'] = 0
+        # for k, v in kwargs.items():
+        #     if not v:
+        #         kwargs.pop(k)
+        kwargs['pk'] = None
         self.__dict__.update(kwargs)
 
     @classmethod

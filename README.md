@@ -9,10 +9,15 @@ This project should eventually implement various database-backed tricks and shor
 As it stands, it currently implements a high-level database wrapper, tailored to an SQLite backend.
 
 
+DOING
+-----
+
+* Support automatic primary keys (and update vs insert)
+    > pk done
+
 TODO
 ----
 
-* Support automatic primary keys (and update vs insert)
 * respect default values in db models
 * Support relations
 * Support other SQL backends

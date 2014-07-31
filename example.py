@@ -40,13 +40,3 @@ class Test(DBModel):
 
     def __repr__(self):
         return '{0} - {1}'.format(self.foo, self.bar)
-
-
-Test(foo=1, bar=2).save()
-Test(foo=1, bar=2).save()
-Test(foo=1, bar=2).save()
-
-# blah = Test.find(foo=1)
-# print blah[0]
-# for obj in blah:
-#     print obj.id
