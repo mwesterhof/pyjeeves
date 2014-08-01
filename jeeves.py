@@ -84,6 +84,13 @@ class Database(object):
         ), logging=True)
         self.db.commit()
 
+    def _delete_from_table(self, name, pk):
+        self.execute('DELETE FROM {0} WHERE pk={1}'.format(
+            name,
+            pk
+        ), logging=True)
+        self.db.commit()
+
     def _listing(self, name, *fields):
         if not fields:
             fields = '*'
@@ -108,6 +115,10 @@ class Database(object):
         name = obj.__class__.__name__.lower()
         data = obj.__dict__
         return self._insert_into_table(name, **data)
+
+    def delete_object(self, obj):
+        name = obj.__class__.__name__.lower()
+        return self._delete_from_table(name, obj.pk)
 
 
 class DBModelMeta(type):
@@ -157,3 +168,7 @@ class DBModel(object):
             return Database().update_object(self)
         else:
             return Database().insert_object(self)
+
+    def delete(self):
+        if self.pk:
+            return Database().delete_object(self)

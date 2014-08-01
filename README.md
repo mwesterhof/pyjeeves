@@ -9,17 +9,19 @@ As it stands, it currently implements a high-level database wrapper, tailored to
 DONE
 -----
 * Support automatic primary keys (and update vs insert)
+* full CRUD
 
 DOING
 -----
 
 TODO
 ----
-* delete
-* respect default values in db models
-* Support relations
-* Support other SQL backends
-* testsuite
 
-* Plugin system
-* Further tools
+want:
+    * respect default values in db models
+    * Support relations
+    * testsuite
+    * Plugin system
+    * Further tools
+optional:
+    * Support other SQL backends
