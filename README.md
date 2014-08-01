@@ -19,7 +19,7 @@ DOING
 TODO
 ----
 want:
-    * model.save() -> model should have pk
+    * model.save(), model should have pk
     * Support relations
     * Plugin system
     * Further tools
