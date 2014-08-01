@@ -1,6 +1,7 @@
+import inspect
+from os import path
 import sqlite3
 
-from os import path
 
 root_dir = path.dirname(__file__)
 
@@ -148,9 +149,21 @@ class DBModel(object):
 
     def __init__(self, **kwargs):
         super(DBModel, self).__init__()
-        # for k, v in kwargs.items():
-        #     if not v:
-        #         kwargs.pop(k)
+
+        default = dict([
+            m
+            for m in inspect.getmembers(self)
+            if not (
+                m[0].startswith('_') or
+                inspect.ismethod(m[1]) or
+                m[0] == 'pk'
+            )
+        ])
+        self.__dict__.update(default)
+
+        for k, v in kwargs.items():
+            if not v and not k == 'pk':
+                kwargs.pop(k)
         self.pk = None
         self.__dict__.update(kwargs)
 

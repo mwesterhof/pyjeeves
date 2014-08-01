@@ -10,15 +10,14 @@ DONE
 -----
 * Support automatic primary keys (and update vs insert)
 * full CRUD
+* respect default values in db models
 
 DOING
 -----
 
 TODO
 ----
-
 want:
-    * respect default values in db models
     * Support relations
     * testsuite
     * Plugin system
