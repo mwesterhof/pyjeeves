@@ -12,6 +12,10 @@ class Database(object):
     def __init__(self, name=path.join(root_dir, 'jeeves.db'), logging=False):
         # Borg design pattern
         self.__dict__ = self._hive_mind
+        if hasattr(self, 'name'):
+            name = self.name
+        else:
+            self.name = name
 
         self.db = sqlite3.connect(name)
         self.cursor = self.db.cursor()
@@ -65,7 +69,7 @@ class Database(object):
             name,
             columns,
             values
-        ), logging=True)
+        ))
         self.db.commit()
 
     def _update_in_table(self, name, **data):
@@ -82,14 +86,14 @@ class Database(object):
             name,
             columns_expression,
             pk
-        ), logging=True)
+        ))
         self.db.commit()
 
     def _delete_from_table(self, name, pk):
         self.execute('DELETE FROM {0} WHERE pk={1}'.format(
             name,
             pk
-        ), logging=True)
+        ))
         self.db.commit()
 
     def _listing(self, name, *fields):
@@ -177,7 +181,7 @@ class DBModel(object):
         return cls.__name__.lower()
 
     def save(self):
-        if self.pk and not self.find(pk=self.pk):
+        if self.pk and self.find(pk=self.pk):
             return Database().update_object(self)
         else:
             return Database().insert_object(self)

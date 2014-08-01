@@ -11,6 +11,7 @@ DONE
 * Support automatic primary keys (and update vs insert)
 * full CRUD
 * respect default values in db models
+* testsuite (basic)
 
 DOING
 -----
@@ -18,8 +19,8 @@ DOING
 TODO
 ----
 want:
+    * model.save() -> model should have pk
     * Support relations
-    * testsuite
     * Plugin system
     * Further tools
 optional:
