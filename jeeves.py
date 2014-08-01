@@ -65,7 +65,23 @@ class Database(object):
             columns,
             values
         ), logging=True)
+        self.db.commit()
 
+    def _update_in_table(self, name, **data):
+        pk = data.pop('pk')
+
+        columns_expression = ', '.join(
+            [
+                '='.join([key, self._get_repr(value)])
+                for key, value in data.iteritems()
+            ]
+        )
+
+        self.execute('UPDATE {0} SET {1} WHERE pk={2}'.format(
+            name,
+            columns_expression,
+            pk
+        ), logging=True)
         self.db.commit()
 
     def _listing(self, name, *fields):
@@ -83,11 +99,15 @@ class Database(object):
             name.lower(), **fields
         )
 
-    def save_objects(self, objects):
-        for obj in objects:
-            name = obj.__class__.__name__.lower()
-            data = obj.__dict__
-            return self._insert_into_table(name, **data)
+    def update_object(self, obj):
+        name = obj.__class__.__name__.lower()
+        data = obj.__dict__
+        return self._update_in_table(name, **data)
+
+    def insert_object(self, obj):
+        name = obj.__class__.__name__.lower()
+        data = obj.__dict__
+        return self._insert_into_table(name, **data)
 
 
 class DBModelMeta(type):
@@ -120,7 +140,7 @@ class DBModel(object):
         # for k, v in kwargs.items():
         #     if not v:
         #         kwargs.pop(k)
-        kwargs['pk'] = None
+        self.pk = None
         self.__dict__.update(kwargs)
 
     @classmethod
@@ -133,4 +153,7 @@ class DBModel(object):
         return cls.__name__.lower()
 
     def save(self):
-        return Database().save_objects([self])
+        if self.pk and not self.find(pk=self.pk):
+            return Database().update_object(self)
+        else:
+            return Database().insert_object(self)
