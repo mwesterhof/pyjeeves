@@ -19,9 +19,11 @@ DOING
 TODO
 ----
 want:
-    * model.save(), model should have pk
-    * Support relations
-    * Plugin system
-    * Further tools
+
+* model.save(), model should have pk
+* Support relations
+* Plugin system
+* Further tools
+
 optional:
-    * Support other SQL backends
+* Support other SQL backends
