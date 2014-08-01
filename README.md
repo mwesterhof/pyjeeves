@@ -10,8 +10,12 @@ DONE
 -----
 * Support automatic primary keys (and update vs insert)
 
+DOING
+-----
+
 TODO
 ----
+* delete
 * respect default values in db models
 * Support relations
 * Support other SQL backends
