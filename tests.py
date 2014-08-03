@@ -64,6 +64,17 @@ class JeevesTest(unittest.TestCase):
         results = TestDeleteModel.find()
         self.assertEqual(len(results), 0)
 
+    def test_full_crud_galore(self):
+        class TestModelA(DBModel):
+            foo = 0
+
+        class TestModelB(DBModel):
+            foo = ''
+
+        TestModelA().save()
+        for i in range(1, 6):
+            TestModelA(foo=i).save()
+        self.assertEqual(TestModelA.find()[3].foo, 3)
 
 if __name__ == '__main__':
     unittest.main()
