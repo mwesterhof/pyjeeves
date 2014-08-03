@@ -71,6 +71,11 @@ class Database(object):
             values
         ))
         self.db.commit()
+        result = self.execute('SELECT pk FROM {0} WHERE rowid={1}'.format(
+            name,
+            self.cursor.lastrowid
+        ))
+        return result[0][0]
 
     def _update_in_table(self, name, **data):
         pk = data.pop('pk')
@@ -184,7 +189,7 @@ class DBModel(object):
         if self.pk and self.find(pk=self.pk):
             return Database().update_object(self)
         else:
-            return Database().insert_object(self)
+            self.pk = Database().insert_object(self)
 
     def delete(self):
         if self.pk:

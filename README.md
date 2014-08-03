@@ -12,6 +12,7 @@ DONE
 * full CRUD
 * respect default values in db models
 * testsuite (basic)
+* model.save(), model should have pk
 
 DOING
 -----
@@ -20,7 +21,6 @@ TODO
 ----
 want:
 
-* model.save(), model should have pk
 * Support relations
 * Plugin system
 * Further tools

@@ -20,7 +20,9 @@ class JeevesTest(unittest.TestCase):
         self.assertFalse(TestCreateModel.find())
 
         obj = TestCreateModel()
+        self.assertFalse(obj.pk)
         obj.save()
+        self.assertTrue(obj.pk)
 
         self.assertTrue(TestCreateModel.find())
 
@@ -42,10 +44,6 @@ class JeevesTest(unittest.TestCase):
         obj = TestUpdateModel()
         obj.save()
 
-        results = TestUpdateModel.find()
-        self.assertEqual(len(results), 1)
-
-        obj = results[0]
         self.assertEqual(obj.foo, 1)
 
         obj.foo = 2
