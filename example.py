@@ -36,3 +36,7 @@ class Person(DBModel):
 class Test(DBModel):
     test_int = 1
     person_link = Person
+
+person = Person()
+person.save()
+Test(person_link=person).save()

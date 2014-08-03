@@ -76,5 +76,18 @@ class JeevesTest(unittest.TestCase):
             TestModelA(foo=i).save()
         self.assertEqual(TestModelA.find()[3].foo, 3)
 
+    def test_basic_relationals(self):
+        class FooModel(DBModel):
+            name = ''
+
+        class BarModel(DBModel):
+            foo_link = FooModel
+
+        foo = FooModel()
+        foo.save()
+
+        bar = BarModel(foo_link=foo)
+        bar.save()
+
 if __name__ == '__main__':
     unittest.main()

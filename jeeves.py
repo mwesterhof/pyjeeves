@@ -28,7 +28,7 @@ class Database(object):
         self.cursor.execute(command)
         return self.cursor.fetchall()
 
-    def _create_table(self, name, **fields):
+    def _create_table(self, table_name, **fields):
         foreignkeys = []
 
         for key, value in fields.items():
@@ -51,35 +51,11 @@ class Database(object):
             ))
         self.execute(
             'CREATE TABLE IF NOT EXISTS {0} ({1})'.format(
-                name,
+                table_name,
                 ', '.join(fieldspec_list)
             ),
         )
         self.db.commit()
-
-        # TODO: refactor the hell out of this to make foreign keys possible
-        if False:
-            def get_field_spec(n, type_):
-                if type_.startswith('relation_'):
-                    classname = type_.split('_', 1)[1]
-                    return '{0} INTEGER, FOREIGN KEY({0}) REFERENCES {1}(pk)'.format(
-                        n,
-                        classname
-                    )
-
-                return ' '.join([n, type_])
-
-            layout = '(' + \
-                ', '.join(
-                    [get_field_spec(n, type_)
-                        for n, type_ in fields.items()] +
-                    ['pk INTEGER PRIMARY KEY']
-                ) + ')'
-
-            self.execute(
-                'create table if not exists {0} {1}'.format(name, layout),
-            )
-            self.db.commit()
 
     def query(self, cls, lookup):
         name = cls.get_table_name()
@@ -100,25 +76,25 @@ class Database(object):
             return 'NULL'
         return repr(value)
 
-    def _insert_into_table(self, name, **data):
+    def _insert_into_table(self, table_name, **data):
         columns = '(' + ', '.join(data.keys()) + ')'
         values = '(' + ', '.join(
             [self._get_repr(val) for val in data.values()]
         ) + ')'
 
         self.execute('insert into {0} {1} values {2}'.format(
-            name,
+            table_name,
             columns,
             values
         ))
         self.db.commit()
         result = self.execute('SELECT pk FROM {0} WHERE rowid={1}'.format(
-            name,
+            table_name,
             self.cursor.lastrowid
         ))
         return result[0][0]
 
-    def _update_in_table(self, name, **data):
+    def _update_in_table(self, table_name, **data):
         pk = data.pop('pk')
 
         columns_expression = ', '.join(
@@ -129,15 +105,15 @@ class Database(object):
         )
 
         self.execute('UPDATE {0} SET {1} WHERE pk={2}'.format(
-            name,
+            table_name,
             columns_expression,
             pk
         ))
         self.db.commit()
 
-    def _delete_from_table(self, name, pk):
+    def _delete_from_table(self, table_name, pk):
         self.execute('DELETE FROM {0} WHERE pk={1}'.format(
-            name,
+            table_name,
             pk
         ))
         self.db.commit()
@@ -165,6 +141,11 @@ class Database(object):
     def insert_object(self, obj):
         name = obj.__class__.__name__.lower()
         data = obj.__dict__
+
+        for k, v in data.iteritems():
+            if v.__class__.__class__ == DBModelMeta:
+                data[k] = v.pk
+
         return self._insert_into_table(name, **data)
 
     def delete_object(self, obj):

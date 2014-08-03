@@ -14,9 +14,14 @@ DONE
 * testsuite (basic)
 * model.save(), model should have pk
 
+RELATIONS
+---------
+* fix id on save
+* query
+
 DOING
 -----
-* Support relations
+* relations
 
 TODO
 ----
