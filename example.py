@@ -34,9 +34,5 @@ class Person(DBModel):
 
 # and we can make as many classes as we like
 class Test(DBModel):
-    foo = 1
-    bar = 2
-    baz = ''
-
-    def __repr__(self):
-        return '{0} - {1}'.format(self.foo, self.bar)
+    test_int = 1
+    person_link = Person

@@ -24,21 +24,62 @@ class Database(object):
     def execute(self, command, logging=False):
         if self.logging or logging:
             print command
+        print command
         self.cursor.execute(command)
         return self.cursor.fetchall()
 
     def _create_table(self, name, **fields):
-        layout = '(' + \
-            ', '.join(
-                [' '.join([n, type_])
-                    for n, type_ in fields.items()] +
-                ['pk INTEGER PRIMARY KEY']
-            ) + ')'
+        foreignkeys = []
 
+        for key, value in fields.items():
+            if value.startswith('relation_'):
+                target_class = value.split('_', 1)[1]
+                foreignkeys.append((key, target_class))
+                fields[key] = 'INTEGER'
+
+        fieldspec_list = [
+            ' '.join([k, v])
+            for k, v in fields.iteritems()
+        ] + [
+            'pk INTEGER PRIMARY KEY'
+        ]
+
+        for fk in foreignkeys:
+            fieldspec_list.append('FOREIGN KEY({0}) REFERENCES {1}(pk)'.format(
+                fk[0],
+                fk[1]
+            ))
         self.execute(
-            'create table if not exists {0} {1}'.format(name, layout),
+            'CREATE TABLE IF NOT EXISTS {0} ({1})'.format(
+                name,
+                ', '.join(fieldspec_list)
+            ),
         )
         self.db.commit()
+
+        # TODO: refactor the hell out of this to make foreign keys possible
+        if False:
+            def get_field_spec(n, type_):
+                if type_.startswith('relation_'):
+                    classname = type_.split('_', 1)[1]
+                    return '{0} INTEGER, FOREIGN KEY({0}) REFERENCES {1}(pk)'.format(
+                        n,
+                        classname
+                    )
+
+                return ' '.join([n, type_])
+
+            layout = '(' + \
+                ', '.join(
+                    [get_field_spec(n, type_)
+                        for n, type_ in fields.items()] +
+                    ['pk INTEGER PRIMARY KEY']
+                ) + ')'
+
+            self.execute(
+                'create table if not exists {0} {1}'.format(name, layout),
+            )
+            self.db.commit()
 
     def query(self, cls, lookup):
         name = cls.get_table_name()
@@ -136,12 +177,13 @@ class DBModelMeta(type):
         def sql_type(val):
             t = type(val)
             if t in [str, unicode]:
-                return 'text'
+                return 'TEXT'
             if t == int:
-                return 'int'
-
+                return 'INTEGER'
+            if t == DBModelMeta:
+                return 'relation_' + val.get_table_name()
             # fallback
-            return 'text'
+            return 'TEXT'
 
         if name != 'DBModel':
             fields = dict([

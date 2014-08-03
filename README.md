@@ -16,12 +16,13 @@ DONE
 
 DOING
 -----
+* Support relations
 
 TODO
 ----
 want:
 
-* Support relations
+* Reverse relations
 * Plugin system
 * Further tools
 
