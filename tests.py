@@ -83,11 +83,18 @@ class JeevesTest(unittest.TestCase):
         class BarModel(DBModel):
             foo_link = FooModel
 
-        foo = FooModel()
+        foo = FooModel(name='baz')
         foo.save()
 
         bar = BarModel(foo_link=foo)
         bar.save()
+
+        self.assertEqual(bar.foo_link.name, 'baz')
+        bar.foo_link.name = 'baz1'
+        bar.foo_link.save()
+
+        self.assertEqual(bar.foo_link.name, 'baz1')
+        self.assertEqual(foo.name, 'baz1')
 
 if __name__ == '__main__':
     unittest.main()
