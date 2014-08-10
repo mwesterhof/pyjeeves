@@ -14,20 +14,20 @@ DONE
 * testsuite (basic)
 * model.save(), model should have pk
 
-RELATIONS
+TODO
 ---------
-* fix id on save
-* query
+* better testing for relations
+    * fix id on save
+    * query
 
 DOING
 -----
-* relations
+* Reverse relations
 
 TODO
 ----
 want:
 
-* Reverse relations
 * Plugin system
 * Further tools
 
