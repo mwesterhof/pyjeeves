@@ -24,7 +24,6 @@ class Database(object):
     def execute(self, command, logging=False):
         if self.logging or logging:
             print command
-        print command
         self.cursor.execute(command)
         return self.cursor.fetchall()
 
@@ -140,7 +139,7 @@ class Database(object):
 
     def insert_object(self, obj):
         name = obj.__class__.__name__.lower()
-        data = obj.__dict__
+        data = obj.__dict__.copy()
 
         for k, v in data.iteritems():
             if v.__class__.__class__ == DBModelMeta:
