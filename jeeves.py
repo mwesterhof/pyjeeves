@@ -24,7 +24,11 @@ class Database(object):
     def execute(self, command, logging=False):
         if self.logging or logging:
             print command
-        self.cursor.execute(command)
+        try:
+            self.cursor.execute(command)
+        except Exception as e:
+            print '{0}: {1}'.format(command, e)
+            raise
         return self.cursor.fetchall()
 
     def _create_table(self, table_name, **fields):
@@ -195,6 +199,16 @@ class DBModel(object):
         for k, v in kwargs.items():
             if not v and not k == 'pk':
                 kwargs.pop(k)
+                continue
+
+            # TODO: methinks we need lazy loading here,
+            # instead of preloading
+            if k in default and default[k].__class__ == DBModelMeta:
+                try:
+                    kwargs[k] = default[k].find(pk=kwargs[k].pk)[0]
+                except AttributeError:
+                    kwargs[k] = default[k].find(pk=kwargs[k])[0]
+
         self.pk = None
         self.__dict__.update(kwargs)
 

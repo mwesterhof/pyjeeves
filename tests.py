@@ -94,7 +94,24 @@ class JeevesTest(unittest.TestCase):
         bar.foo_link.save()
 
         self.assertEqual(bar.foo_link.name, 'baz1')
-        self.assertEqual(foo.name, 'baz1')
 
+        # this part should be enabled once relational lookups work
+        # foo = FooModel.find(parent=bar)
+        # self.assertEqual(foo.name, 'baz1')
+
+    def test_reverse_lookup(self):
+        class ParentModel(DBModel):
+            pass
+
+        class ChildModel(DBModel):
+            parent = ParentModel
+
+        parent = ParentModel()
+        parent.save()
+
+        child = ChildModel(parent=parent)
+        child.save()
+
+        self.assertEqual(ChildModel.find()[0].parent.pk, parent.pk)
 if __name__ == '__main__':
     unittest.main()
