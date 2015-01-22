@@ -1,6 +1,10 @@
 import os
 
 
+class JeevesError(Exception):
+    pass
+
+
 class HeadQuarters(object):
     def __init__(self):
         old_cwd = None
@@ -9,7 +13,7 @@ class HeadQuarters(object):
         hq = os.path.join(cwd, '.jeeves')
         while not os.path.exists(hq):
             if old_cwd == cwd:
-                raise ValueError('hq not found')
+                raise JeevesError('hq not found')
             old_cwd = cwd
             cwd = os.path.dirname(cwd)
             hq = os.path.join(cwd, '.jeeves')
