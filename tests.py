@@ -1,15 +1,15 @@
-from os import path, unlink
+from os import unlink
 import unittest
 
-from jeeves import Database, DBModel
+from database import Database, DBModel
 
 
 class JeevesTest(unittest.TestCase):
     def setUp(self):
-        Database('/tmp/jeeves.db')
+        Database()
 
     def tearDown(self):
-        unlink('/tmp/jeeves.db')
+        unlink(Database().name)
 
     def test_create(self):
         class TestCreateModel(DBModel):

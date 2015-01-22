@@ -7,7 +7,7 @@ be used as a default, if we attempt to save the object without specifying that
 value.
 '''
 
-from jeeves import DBModel
+from database import DBModel
 
 
 # the name of our class and (lowercased) table
