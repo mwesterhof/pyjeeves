@@ -22,4 +22,4 @@ sys.path.extend([
 plugin = __import__(plugin_name)
 sys.path = old_path
 
-plugin.run_command(args)
+plugin.Plugin().run_command(args)

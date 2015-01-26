@@ -1,6 +1,9 @@
 import os
 
+from plugin import BasePlugin
 
-def run_command(args):
-    print 'creating jeeves headquarters in {0}'.format(os.getcwd())
-    os.makedirs('.jeeves')
+
+class Plugin(BasePlugin):
+    def run_command(self, args):
+        print 'creating jeeves headquarters in {0}'.format(os.getcwd())
+        os.makedirs('.jeeves')
