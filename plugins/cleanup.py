@@ -5,6 +5,9 @@ from plugin import BasePlugin
 
 
 class Plugin(BasePlugin):
+    '''
+    Removes the database file from the current HQ
+    '''
     def run_command(self, args):
         hq = HeadQuarters()
         print 'cleaning up database in {0}'.format(hq.hq)

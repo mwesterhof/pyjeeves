@@ -5,6 +5,9 @@ from plugin import BasePlugin, get_plugins
 
 
 class Plugin(BasePlugin):
+    '''
+    Show the status
+    '''
     def run_command(self, args):
         plugins = get_plugins()
 

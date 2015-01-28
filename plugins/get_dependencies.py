@@ -2,6 +2,9 @@ from plugin import BasePlugin, get_plugins
 
 
 class Plugin(BasePlugin):
+    '''
+    Gathers the dependencies for all the plugins
+    '''
     def run_command(self, args):
         gathered_deps = []
         for plugin_name in get_plugins():
