@@ -1,34 +1,9 @@
-PYJeeves
-========
-__work in progress__
+# Jeeves
 
-This project should eventually implement various database-backed tricks and shortcuts, to streamline human-computer interaction in a terminal environment.
+Jeeves (or *pyjeeves*) is a package, intended to provide an easy-to-use framework for automation tools in a (*bash*) shell. It's your very own command line butler.
 
-As it stands, it currently implements a high-level database wrapper, tailored to an SQLite backend.
+No, it's not a clever acronym. Disappointed? Fine, it's an acronym, and it stands for...
 
-DONE
------
-* Support automatic primary keys (and update vs insert)
-* full CRUD
-* respect default values in db models
-* testsuite (basic)
-* model.save(), model should have pk
+*Java-less Ergonomically-Engineered Versatility... Errr... System*
 
-DOING
------
-* better testing for relations
-    * fix id on save
-
-TODO
-----
-want:
-    relations:
-        * query
-        * Reverse relations
-
-* Plugin system
-* Further tools
-
-optional:
-
-* Support other SQL backends
+There ya go.
