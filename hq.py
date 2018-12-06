@@ -30,4 +30,4 @@ class HeadQuarters(object):
 
 if __name__ == '__main__':
     hq = HeadQuarters()
-    print hq.hq
+    print(hq.hq)

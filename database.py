@@ -21,11 +21,11 @@ class Database(object):
 
     def execute(self, command, logging=False):
         if self.logging or logging:
-            print command
+            print(command)
         try:
             self.cursor.execute(command)
         except Exception as e:
-            print '{0}: {1}'.format(command, e)
+            print('{0}: {1}'.format(command, e))
             raise
         return self.cursor.fetchall()
 
@@ -40,7 +40,7 @@ class Database(object):
 
         fieldspec_list = [
             ' '.join([k, v])
-            for k, v in fields.iteritems()
+            for k, v in fields.items()
         ] + [
             'pk INTEGER PRIMARY KEY'
         ]
@@ -101,7 +101,7 @@ class Database(object):
         columns_expression = ', '.join(
             [
                 '='.join([key, self._get_repr(value)])
-                for key, value in data.iteritems()
+                for key, value in data.items()
             ]
         )
 
@@ -143,7 +143,7 @@ class Database(object):
         name = obj.__class__.__name__.lower()
         data = obj.__dict__.copy()
 
-        for k, v in data.iteritems():
+        for k, v in data.items():
             if v.__class__.__class__ == DBModelMeta:
                 data[k] = v.pk
 
@@ -158,7 +158,7 @@ class DBModelMeta(type):
     def __new__(cls, name, bases, dict_):
         def sql_type(val):
             t = type(val)
-            if t in [str, unicode]:
+            if t in [str]:
                 return 'TEXT'
             if t == int:
                 return 'INTEGER'
@@ -177,7 +177,7 @@ class DBModelMeta(type):
         return super(DBModelMeta, cls).__new__(cls, name, bases, dict_)
 
 
-class DBModel(object):
+class DBModel(metaclass=DBModelMeta):
     __metaclass__ = DBModelMeta
 
     def __init__(self, **kwargs):
