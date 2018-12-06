@@ -5,7 +5,7 @@ class JeevesError(Exception):
     pass
 
 
-class HeadQuarters(object):
+class HeadQuarters:
     def __init__(self):
         hq = self.get_hq()
 

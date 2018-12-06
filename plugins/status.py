@@ -13,12 +13,12 @@ class Plugin(BasePlugin):
 
         try:
             hq = HeadQuarters()
-            print 'Jeeves status:'
-            print 'headquarters @{0}'.format(hq.hq)
-            print 'plugins:'
+            print('Jeeves status:')
+            print('headquarters @{0}'.format(hq.hq))
+            print('plugins:')
             for plugin in plugins:
-                print '\t', plugin[0]
+                print('\t', plugin[0])
                 if plugin[1]:
-                    print '\t' * 2, plugin[1]
+                    print('\t' * 2, plugin[1])
         except JeevesError:
             sys.exit('No headquarters found. Create using the "init" plugin')

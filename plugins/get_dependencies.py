@@ -11,4 +11,4 @@ class Plugin(BasePlugin):
             plugin = __import__(plugin_name[0])
             gathered_deps.extend(plugin.Plugin.dependencies)
         for dep in sorted(list(set(gathered_deps))):
-            print dep
+            print(dep)

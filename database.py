@@ -5,7 +5,7 @@ import sqlite3
 from hq import HeadQuarters
 
 
-class Database(object):
+class Database:
     _hive_mind = {}
 
     def __init__(self, logging=False):
@@ -178,8 +178,6 @@ class DBModelMeta(type):
 
 
 class DBModel(metaclass=DBModelMeta):
-    __metaclass__ = DBModelMeta
-
     def __init__(self, **kwargs):
         super(DBModel, self).__init__()
 

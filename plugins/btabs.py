@@ -2,6 +2,8 @@ import webbrowser
 
 from database import Database, DBModel
 from plugin import BasePlugin
+
+
 Database()
 
 
@@ -31,9 +33,9 @@ class Plugin(BasePlugin):
     Browser tabs management
     '''
     def _print_title(self, title, spacer=2):
-        print '\n' * spacer
-        print title
-        print '-' * len(title)
+        print('\n' * spacer)
+        print(title)
+        print('-' * len(title))
 
     def run_command(self, args):
         if args:
@@ -50,14 +52,14 @@ class Plugin(BasePlugin):
 
         for i, group in enumerate(configs):
             links = TabLink.find(parent=group.pk)
-            print '[{0}]: <{1}> ({2} links)'.format(
+            print('[{0}]: <{1}> ({2} links)'.format(
                 i,
                 group,
                 len(links)
-            )
+            ))
 
         try:
-            opt = raw_input('Enter a number (or a name to add a new group): ')
+            opt = input('Enter a number (or a name to add a new group): ')
             opt = int(opt)
         except ValueError:
             tc = TabConfig(name=opt)
@@ -69,20 +71,20 @@ class Plugin(BasePlugin):
         self._print_title(config.name)
         links = TabLink.find(parent=config.pk)
         for i, link in enumerate(links):
-            print '[{0}]: >> {1}'.format(i, link)
-        opt = raw_input('(a)dd, (e)dit, (r)emove, (o)pen: ').upper()
+            print('[{0}]: >> {1}'.format(i, link))
+        opt = input('(a)dd, (e)dit, (r)emove, (o)pen: ').upper()
         if 'ADD'.startswith(opt):
-            url = raw_input('url: ')
+            url = input('url: ')
             TabLink(url=url, parent=config.pk).save()
         elif 'EDIT'.startswith(opt):
-            opt = int(raw_input('index: '))
-            url = raw_input('url: ')
+            opt = int(input('index: '))
+            url = input('url: ')
             link = links[opt]
             link.parent = config.pk
             link.url = url
             link.save()
         elif 'REMOVE'.startswith(opt):
-            opt = int(raw_input('index (-1 for all): '))
+            opt = int(input('index (-1 for all): '))
             if opt == -1:
                 for tl in TabLink.find(parent=config.pk):
                     tl.delete()
