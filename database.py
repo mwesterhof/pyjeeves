@@ -192,9 +192,10 @@ class DBModel(metaclass=DBModelMeta):
         ])
         self.__dict__.update(default)
 
+        keys_to_pop = []
         for k, v in kwargs.items():
             if not v and not k == 'pk':
-                kwargs.pop(k)
+                keys_to_pop.append(k)
                 continue
 
             # TODO: methinks we need lazy loading here,
@@ -204,6 +205,9 @@ class DBModel(metaclass=DBModelMeta):
                     kwargs[k] = default[k].find(pk=kwargs[k].pk)[0]
                 except AttributeError:
                     kwargs[k] = default[k].find(pk=kwargs[k])[0]
+
+        for key in keys_to_pop:
+            kwargs.pop(key)
 
         self.pk = None
         self.__dict__.update(kwargs)
