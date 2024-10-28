@@ -27,7 +27,9 @@ def get_plugins():
         for result in results
     ]
 
-    return sorted(combined, key=lambda i: i[0])
+    unique = set(combined)
+
+    return sorted(unique, key=lambda i: i[0])
 
 
 class BasePlugin(object):

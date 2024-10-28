@@ -1,3 +1,4 @@
+from datetime import datetime
 import inspect
 import sqlite3
 
@@ -146,6 +147,8 @@ class Database:
         for k, v in data.items():
             if v.__class__.__class__ == DBModelMeta:
                 data[k] = v.pk
+            elif v.__class__ == datetime:
+                data[k] = v.isoformat()
 
         return self._insert_into_table(name, **data)
 
@@ -158,6 +161,8 @@ class DBModelMeta(type):
     def __new__(cls, name, bases, dict_):
         def sql_type(val):
             t = type(val)
+            if t == datetime:
+                return 'DATETIME'
             if t in [str]:
                 return 'TEXT'
             if t == int:
